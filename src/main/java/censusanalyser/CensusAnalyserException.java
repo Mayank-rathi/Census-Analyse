@@ -3,8 +3,9 @@ package censusanalyser;
 public class CensusAnalyserException extends Exception {
 
     enum ExceptionType {
-        CENSUS_FILE_PROBLEM
+        CENSUS_FILE_PROBLEM, UNABLE_TO_PASS
     }
+
     ExceptionType type;
 
     public CensusAnalyserException(String message, ExceptionType type) {
