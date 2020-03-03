@@ -6,13 +6,13 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import java.io.Reader;
 import java.util.Iterator;
 
-public class OpenCSVBuilder {
+public class OpenCSVBuilder implements ICSVBuilder {
 
-    public <E>Iterator<E> getCSVFileIterator(Reader reader, Class<E> csvClass) {
-        CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
+    public Iterator<ICSVBuilder> getCSVFileIterator(Reader reader, Class csvClass) {
+        CsvToBeanBuilder<ICSVBuilder> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
         csvToBeanBuilder.withType(csvClass);
         csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
-        CsvToBean<E> csvToBean = csvToBeanBuilder.build();
+        CsvToBean<ICSVBuilder> csvToBean = csvToBeanBuilder.build();
         return csvToBean.iterator();
     }
 }
