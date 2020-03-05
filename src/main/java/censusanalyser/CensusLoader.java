@@ -12,8 +12,16 @@ public class CensusLoader {
     List<CensusDTO> CensusDTOS = null;
     public Map<String, CensusDTO> censusDTOMap = null;
 
+    public Map<String, CensusDTO> loadCensusData(CensusAnalyser.Country country, String[] csvFilePath) throws CensusAnalyserException {
+        if (country.equals(CensusAnalyser.Country.INDIA))
+            return this.loadCensusData(IndiaCensusCSV.class, csvFilePath);
+        else if (country.equals(CensusAnalyser.Country.US))
+            return this.loadCensusData(USCensusCSV.class, csvFilePath);
+        throw new CensusAnalyserException("Country not found", CensusAnalyserException.ExceptionType.INVALID_COUNTRY);
 
-    public <E> Map<String, CensusDTO> loadCensusData(Class<E> censusCSVclass, String... csvFilePath) throws CensusAnalyserException {
+    }
+
+    private <E> Map<String, CensusDTO> loadCensusData(Class<E> censusCSVclass, String... csvFilePath) throws CensusAnalyserException {
         censusDTOMap = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath[0]))) {
             ICSVBuilder csvBuilder = CsvToBuilderFactory.creatCSVBuilder();
@@ -32,7 +40,7 @@ public class CensusLoader {
             }
             if (csvFilePath.length == 1)
                 return censusDTOMap;
-            this.loadIndianStateCode(censusDTOMap, csvFilePath[1]);
+            this.loadStateCode(censusDTOMap, csvFilePath[1]);
             return censusDTOMap;
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
@@ -42,7 +50,7 @@ public class CensusLoader {
         }
     }
 
-    private int loadIndianStateCode(Map<String, CensusDTO> censusDTOMap, String csvFilePath) throws CensusAnalyserException {
+    private int loadStateCode(Map<String, CensusDTO> censusDTOMap, String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder csvBuilder = CsvToBuilderFactory.creatCSVBuilder();
             Iterator<IndiaStateCodeCsv> codeCsvIterator = csvBuilder.getCSVFileIterator(reader, IndiaStateCodeCsv.class);
@@ -58,4 +66,6 @@ public class CensusLoader {
             throw new CensusAnalyserException(e.getMessage(), CensusAnalyserException.ExceptionType.UNABLE_TO_PASS);
         }
     }
+
+
 }

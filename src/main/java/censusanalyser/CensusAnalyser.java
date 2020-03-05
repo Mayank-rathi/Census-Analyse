@@ -13,18 +13,18 @@ import java.util.stream.StreamSupport;
 public class CensusAnalyser {
     List<CensusDTO> CensusDTOS = null;
     Map<String, CensusDTO> censusDTOMap = null;
-
-    public int loadIndiaCensusData(String... csvFilePath) throws CensusAnalyserException {
-        censusDTOMap = new CensusLoader().loadCensusData(IndiaCensusCSV.class, csvFilePath);
+    public enum Country{INDIA,US};
+    public int loadCensusData(Country country,String... csvFilePath) throws CensusAnalyserException {
+        censusDTOMap = new CensusLoader().loadCensusData(country, csvFilePath);
         CensusDTOS = censusDTOMap.values().stream().collect(Collectors.toList());
         return censusDTOMap.size();
     }
 
-    public int loadUSCensusData(String... csvFilePath) throws CensusAnalyserException {
-        censusDTOMap = new CensusLoader().loadCensusData(USCensusCSV.class, csvFilePath);
+    /*public int loadUSCensusData(Country country,String... csvFilePath) throws CensusAnalyserException {
+        censusDTOMap = new CensusLoader().loadCensusData(country, csvFilePath);
         CensusDTOS = censusDTOMap.values().stream().collect(Collectors.toList());
         return censusDTOMap.size();
-    }
+    }*/
 
 
     public String getStateWiseSortedCensusData() throws CensusAnalyserException {
