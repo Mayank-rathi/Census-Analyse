@@ -46,18 +46,10 @@ public class CensusAnalyser {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder csvBuilder = CsvToBuilderFactory.creatCSVBuilder();
             Iterator<IndiaStateCodeCsv> codeCsvIterator = csvBuilder.getCSVFileIterator(reader, IndiaStateCodeCsv.class);
-         /*   Iterable<IndiaStateCodeCsv> codeCsvIterable = () -> codeCsvIterator;
+            Iterable<IndiaStateCodeCsv> codeCsvIterable = () -> codeCsvIterator;
             StreamSupport.stream(codeCsvIterable.spliterator(), false)
-                    .filter(csvState->censusDTOMap.get(csvState.state)!=null)
-                    .forEach(csvState-> censusDTOMap.get(csvState).stateCode=csvState.stateCode);
-*/
-            while (codeCsvIterator.hasNext()) {
-                IndiaStateCodeCsv indiaStateCodeCsv = codeCsvIterator.next();
-                IndiaCensusDTO indiaCensusDTO = censusDTOMap.get(indiaStateCodeCsv.stateCode);
-                if (indiaCensusDTO == null) {
-                    continue;
-                }
-            }
+                    .filter(csvState -> censusDTOMap.get(csvState.state) != null)
+                    .forEach(csvState -> censusDTOMap.get(csvState.state).stateCode = csvState.stateCode);
             return censusDTOMap.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
